@@ -116,16 +116,16 @@ public class App {
                 reservarHabitacio();
                 break;
             case 2:
-                seleccionarTipusHabitacio();
+                alliberarHabitacio();
                 break;
             case 3:
-                seleccionarTipusHabitacioDisponible();
+                consultarDisponibilitat();
                 break;
             case 4:
                 obtindreReserva();
                 break;
             case 5:
-                llistarReservesPerTipus(codis, tipus);
+                obtindreReservaPerTipus();
                 break;
             case 6:
                 System.out.println("Eixint del sistema de reserves..");
@@ -143,9 +143,9 @@ public class App {
     public static void reservarHabitacio() {
         System.out.println("\n===== RESERVAR HABITACIÓ =====");
         // Seleccionamos el tipo de habitación disponible.
-        //String tipusHabitacio = seleccionarTipusHabitacioDisponible();
+        // String tipusHabitacio = seleccionarTipusHabitacioDisponible();
         // Seleccionamos los servicios adicionales.
-        //ArrayList<String> serveisSeleccionats = seleccionarServeis();
+        // ArrayList<String> serveisSeleccionats = seleccionarServeis();
 
     }
 
@@ -178,17 +178,17 @@ public class App {
                         break;
                 }
                 // Comprobar la disponibilidad
-				int disponibles = disponibilitatHabitacions.getOrDefault(tipusHabitacio, 0);
-				if (disponibles <= 0) {
-					System.out.println(
-							"No hi ha habitacions disponibles per al tipus seleccionat (" + tipusHabitacio + ").");
-					tipusHabitacio = null; // Reinicia el tipo seleccionado si no hay disponibilidad
-				}
+                int disponibles = disponibilitatHabitacions.getOrDefault(tipusHabitacio, 0);
+                if (disponibles <= 0) {
+                    System.out.println(
+                            "No hi ha habitacions disponibles per al tipus seleccionat (" + tipusHabitacio + ").");
+                    tipusHabitacio = null; // Reinicia el tipo seleccionado si no hay disponibilidad
+                }
 
             } else {
-				// Si la entrada no es una opción válida (ni 1, 2 o 3)
-				System.out.println(" =====> ERROR. Opció no vàlida.");
-			}
+                // Si la entrada no es una opción válida (ni 1, 2 o 3)
+                System.out.println(" =====> ERROR. Opció no vàlida.");
+            }
         }
         return tipusHabitacio;
     }
