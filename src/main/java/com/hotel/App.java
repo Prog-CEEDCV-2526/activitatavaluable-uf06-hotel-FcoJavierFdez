@@ -125,7 +125,7 @@ public class App {
                 obtindreReserva();
                 break;
             case 5:
-                // llistarReservesPerTipus(codis,tipusHabitacio);
+                llistarReservesPerTipus(codis, tipus);
                 break;
             case 6:
                 System.out.println("Eixint del sistema de reserves..");
@@ -142,7 +142,10 @@ public class App {
      */
     public static void reservarHabitacio() {
         System.out.println("\n===== RESERVAR HABITACIÓ =====");
-        // TODO:
+        // Seleccionamos el tipo de habitación disponible.
+        //String tipusHabitacio = seleccionarTipusHabitacioDisponible();
+        // Seleccionamos los servicios adicionales.
+        //ArrayList<String> serveisSeleccionats = seleccionarServeis();
 
     }
 
@@ -151,8 +154,43 @@ public class App {
      * retorna el nom del tipus.
      */
     public static String seleccionarTipusHabitacio() {
-        // TODO:
-        return null;
+        String tipusHabitacio = null;
+
+        while (tipusHabitacio == null) {
+
+            System.out.print("Seleccione el tipus d'habitació; ");
+            String entrada = scanner.nextLine();
+
+            if (entrada.equals("1") || entrada.equals("2") || entrada.equals("3")) {
+                int opcio = Integer.parseInt(entrada);
+                switch (opcio) {
+                    case 1:
+                        tipusHabitacio = TIPUS_ESTANDARD;
+                        break;
+                    case 2:
+                        tipusHabitacio = TIPUS_SUITE;
+                        break;
+                    case 3:
+                        tipusHabitacio = TIPUS_DELUXE;
+                        break;
+                    default:
+                        System.out.println("Opció no vàlida. Si us plau, seleccioneu una opció vàlida.");
+                        break;
+                }
+                // Comprobar la disponibilidad
+				int disponibles = disponibilitatHabitacions.getOrDefault(tipusHabitacio, 0);
+				if (disponibles <= 0) {
+					System.out.println(
+							"No hi ha habitacions disponibles per al tipus seleccionat (" + tipusHabitacio + ").");
+					tipusHabitacio = null; // Reinicia el tipo seleccionado si no hay disponibilidad
+				}
+
+            } else {
+				// Si la entrada no es una opción válida (ni 1, 2 o 3)
+				System.out.println(" =====> ERROR. Opció no vàlida.");
+			}
+        }
+        return tipusHabitacio;
     }
 
     /**
@@ -162,8 +200,26 @@ public class App {
      */
     public static String seleccionarTipusHabitacioDisponible() {
         System.out.println("\nTipus d'habitació disponibles:");
-        // TODO:
-        return null;
+        System.out.println("1. Estàndard - " + disponibilitatHabitacions.get(TIPUS_ESTANDARD)
+                + " habitacions disponibles, " + preusHabitacions.get(TIPUS_ESTANDARD) + "€");
+        System.out.println("2. Suite - " + disponibilitatHabitacions.get(TIPUS_SUITE) + " habitacions disponibles, "
+                + preusHabitacions.get(TIPUS_SUITE) + "€");
+        System.out.println("3. Deluxe - " + disponibilitatHabitacions.get(TIPUS_DELUXE) + " habitacions disponibles, "
+                + preusHabitacions.get(TIPUS_DELUXE) + "€");
+        // Llamamos al metodo para seleccionar el tipo de habitacion.
+        String tipusSeleccionat = seleccionarTipusHabitacio();
+
+        if (tipusSeleccionat != null && disponibilitatHabitacions.get(tipusSeleccionat) > 0) {
+            // Actualizamos la disponibilidad de habitaciones
+            int disponibilidadActual = disponibilitatHabitacions.get(tipusSeleccionat);
+            // Disminuimos en 1 la disponibilidad
+            disponibilitatHabitacions.put(tipusSeleccionat, disponibilidadActual - 1);
+
+            return tipusSeleccionat;
+        } else {
+            System.out.println("No hi ha habitacions disponibles d'aquest tipus.");
+            return null;
+        }
     }
 
     /**
@@ -171,9 +227,61 @@ public class App {
      * els retorna en un ArrayList de String.
      */
     public static ArrayList<String> seleccionarServeis() {
-        // TODO:
+        // Creamos una arrayList para almacenar los servicios seleccionados.
+        ArrayList<String> serveisSeleccionats = new ArrayList<>();
 
-        return null;
+        // Definimos los servicios disponibles.
+        System.out.println("Serveis addicionals (0-4):");
+        System.out.println("0. Finalitzar.");
+        System.out.println("1. Esmorzar (" + preusServeis.get(SERVEI_ESMORZAR) + "€)");
+        System.out.println("2. Gimnàs (" + preusServeis.get(SERVEI_GIMNAS) + "€");
+        System.out.println("3. Spa (" + preusServeis.get(SERVEI_SPA) + "€)");
+        System.out.println("4. Piscina (" + preusServeis.get(SERVEI_PISCINA) + "€)");
+
+        // Leemos la opción seleccionada por el usuario.
+        int opcio = -1;
+        while (opcio != 0) {
+            // Solicitamos al usuario que seleccione un servicio.
+            System.out.print("Vols afegir un servei?(s/n)");
+            System.out.print("Seleccione servei:");
+            // Leemos la opcion del servicio.
+            opcio = scanner.nextInt();
+
+            String servei = "";
+
+            switch (opcio) {
+                case 1:
+                    servei = SERVEI_ESMORZAR;
+                    break;
+                case 2:
+                    servei = SERVEI_GIMNAS;
+                    break;
+                case 3:
+                    servei = SERVEI_SPA;
+                    break;
+                case 4:
+                    servei = SERVEI_PISCINA;
+                    break;
+                case 0:
+                    System.out.println("Finalitzant selecció de serveis.");
+                    break;
+                default:
+                    System.out.println("Opció no vàlida. Si us plau, seleccioneu una opció vàlida.");
+                    continue;
+            }
+            if (!servei.isEmpty()) {
+                // Comprobar si el servicio ya ha sido seleccionado
+                if (serveisSeleccionats.contains(servei)) {
+                    System.out.println("Ja has afegit " + servei + ". ");
+                } else {
+                    // Añadir el servicio a la lista de seleccionados
+                    serveisSeleccionats.add(servei);
+                    System.out.println("Servei afegit:" + servei);
+                }
+            }
+        }
+        // Devuelve la lista de servicios seleccionados.
+        return serveisSeleccionats;
     }
 
     /**
@@ -190,7 +298,13 @@ public class App {
      * (entre 100 i 999) que no estiga repetit.
      */
     public static int generarCodiReserva() {
-        // TODO:
+        // Generamos el codigo de reserva aleatorio.
+        int codiReserva = (int) (Math.random() * 1000);
+        // Formateamos el codigo para que tenga 3 digitos.
+        String strCodiReserva = String.format("%03d", codiReserva);
+        // Imprimimos el codigo por pantalla.
+        System.out.println("Codi de reserva: " + strCodiReserva);
+
         return 0;
     }
 
