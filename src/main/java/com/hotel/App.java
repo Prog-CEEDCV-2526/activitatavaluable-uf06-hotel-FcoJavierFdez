@@ -142,32 +142,53 @@ public class App {
      */
     public static void reservarHabitacio() {
         System.out.println("\n===== RESERVAR HABITACIÓ =====");
-        // Seleccionar tipo de habitación disponible
+
+        // Selecciona tipo de habitación disponible
         String tipusHabitacio = seleccionarTipusHabitacioDisponible();
-
+        // Selecciona servicios adicionales
         ArrayList<String> serveisSeleccionats = seleccionarServeis();
-
-        // Calcular precio total
-        float preuTotal = calcularPreuTotal(tipusHabitacio, serveisSeleccionats);
-
-        // Imprime que se ha creado la reserva correctamente
-        System.out.println("Reserva realitzada correctament.");
-
-        // Generar código de reserva
+        // Calcula subtotal y total con IVA
+        float subtotal = calcularPreuTotal(tipusHabitacio, serveisSeleccionats); // sin IVA
+        float iva = subtotal * IVA;
+        float total = subtotal + iva;
+        // Genera código de reserva
         int codiReserva = generarCodiReserva();
 
-        // Almacenar los datos de la reserva
-        ArrayList<String> reserva = new ArrayList<>();
-        reserva.add("Codi de Reserva: " + codiReserva);
-        reserva.add("Tipus d'Habitació: " + tipusHabitacio);
-        reserva.add("Cost Total: " + preuTotal);
-        reserva.add("Serveis Addicionals: " + serveisSeleccionats);
+        // Formatea los servicios para mostrar con precios
+        String serveisFormatejats = "";
+        if (serveisSeleccionats.isEmpty()) {
+            serveisFormatejats = "Ninguno";
+        } else {
+            for (int i = 0; i < serveisSeleccionats.size(); i++) {
+                String servei = serveisSeleccionats.get(i);
+                serveisFormatejats += servei + " (" + preusServeis.get(servei) + "€)";
+                if (i < serveisSeleccionats.size() - 1) {
+                    serveisFormatejats += ", ";
+                }
+            }
+        }
 
-        // Añadir reserva al sistema con el código único
+        // Guarda la reserva en el HashMap
+        ArrayList<String> reserva = new ArrayList<>();
+
+        reserva.add("Tipus habitació: " + tipusHabitacio);
+        reserva.add("Serveis: " + serveisFormatejats);
+        reserva.add("Subtotal: " + subtotal);
+        reserva.add("IVA: " + iva);
+        reserva.add("TOTAL: " + total);
+        reserva.add("Codi de reserva: " + codiReserva);
+
         reserves.put(codiReserva, reserva);
 
-        System.out.println("Preu total de la reserva: " + preuTotal + "€");
-        System.out.println("");
+        // Mostrar datos de la reserva
+        System.out.println("\nCalculem el total...");
+        System.out.println("Preu habitació: " + preusHabitacions.get(tipusHabitacio) + " euros");
+        System.out.println("Serveis: " + serveisFormatejats + " euros");
+        System.out.println("Subtotal: " + subtotal + " euros");
+        System.out.println("IVA (21%): " + iva + " euros");
+        System.out.println("TOTAL: " + total + " euros");
+        System.out.println("Reserva creada amb èxit.");
+        System.out.println("Codi de reserva: " + codiReserva);
 
     }
 
@@ -206,8 +227,9 @@ public class App {
                             "No hi ha habitacions disponibles per al tipus seleccionat (" + tipusHabitacio + ").");
                     tipusHabitacio = null; // Reinicia el tipo seleccionado si no hay disponibilidad
                 }
+            } else {
+                System.out.println("Opció no vàlida. Si us plau, seleccione una opció vàlida.");
             }
-
         }
         return tipusHabitacio;
     }
@@ -257,38 +279,41 @@ public class App {
         System.out.println("3. Spa (" + preusServeis.get(SERVEI_SPA) + " euros)");
         System.out.println("4. Piscina (" + preusServeis.get(SERVEI_PISCINA) + " euros)\n");
 
-        // Leemos la opción seleccionada por el usuario.
-        int opcio = -1;
-        while (opcio != 0) {
+        while (true) {
             // Solicitamos al usuario que seleccione un servicio.
-            System.out.print("Vols afegir un servei?(s/n)");
+            System.out.print("Vols afegir un servei?(s/n): ");
+            String resposta = sc.nextLine().trim().toLowerCase();
+            if (!resposta.equals("s")) {
+                break; // Salimos del bucle si no es si
+            }
+
             System.out.print("Seleccione servei:");
             // Leemos la opcion del servicio.
-            opcio = sc.nextInt();
+            String opcio = sc.nextLine().trim();
 
-            String servei = "";
+            String servei = null;
 
             switch (opcio) {
-                case 1:
+                case "1":
                     servei = SERVEI_ESMORZAR;
                     break;
-                case 2:
+                case "2":
                     servei = SERVEI_GIMNAS;
                     break;
-                case 3:
+                case "3":
                     servei = SERVEI_SPA;
                     break;
-                case 4:
+                case "4":
                     servei = SERVEI_PISCINA;
                     break;
-                case 0:
+                case "0":
                     System.out.println("Finalitzant selecció de serveis.");
                     break;
                 default:
                     System.out.println("Opció no vàlida. Si us plau, seleccioneu una opció vàlida.");
                     continue;
             }
-            if (!servei.isEmpty()) {
+            if (servei != null) {
                 // Comprobar si el servicio ya ha sido seleccionado
                 if (serveisSeleccionats.contains(servei)) {
                     System.out.println("Ja has afegit " + servei + ". ");
@@ -309,8 +334,8 @@ public class App {
      */
     public static float calcularPreuTotal(String tipusHabitacio, ArrayList<String> serveisSeleccionats) {
         // Obtenemos el precio base de la habitación.
-        double preuBase = preusHabitacions.get(tipusHabitacio);
-        double preuServeis = 0.0f;
+        float preuBase = preusHabitacions.get(tipusHabitacio);
+        float preuServeis = 0.0f;
 
         // Comprobamos si serveisSeleccionats no es nulo o vacío
         if (serveisSeleccionats != null && !serveisSeleccionats.isEmpty()) {
@@ -357,13 +382,13 @@ public class App {
         System.out.println("");
         System.out.println("Disponibilitat d'habitacions:");
         // Recorrer el mapa que conté les capacitats inicials
-        for (String habitacio : capacitatsInicials.keySet()) {
+        for (String habitacio : capacitatInicials.keySet()) {
 
             // Obtener la disponibilidad actual de cada tipo de habitación
             int lliures = disponibilitatHabitacions.get(habitacio);
 
             // Obtener la capacidad inicial de la habitación desde capacitatsInicials
-            int total = capacitatsInicials.getOrDefault(habitacio, 0); // Usamos 0 si no está en el mapa inicial
+            int total = capacitatInicials.getOrDefault(habitacio, 0); // Usamos 0 si no está en el mapa inicial
 
             // Calcular las habitaciones ocupadas
             int ocupades = total - lliures;
@@ -408,7 +433,7 @@ public class App {
         int codi = sc.nextInt();
         sc.nextLine();
         // Verificamos si existe el código en el HashMap
-        if (mostrarDadesReserva.containsKey(codi)) {
+        if (reserves.containsKey(codi)) {
             // Si existe, mostramos la reserva
             mostrarDadesReserva(codi);
         } else {
