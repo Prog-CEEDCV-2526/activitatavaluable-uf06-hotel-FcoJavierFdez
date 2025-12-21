@@ -365,13 +365,20 @@ public class App {
      * (entre 100 i 999) que no estiga repetit.
      */
     public static int generarCodiReserva() {
-        // Generamos el codigo de reserva aleatorio.
-        int codiReserva = (int) (Math.random() * 1000);
+        // Generamos el codigo de reserva aleatorio para que sea unico
+        int codiReserva;
+        // Bucle para asegurar que el código generado no esté repetido
+        do {
+            // Genera un número aleatori entre 100 i 999
+            codiReserva = 100 + random.nextInt(900); // 100 + [0-899] = 100-999
+            // Repetimos hasta que el código no esté en el HashMap de reserves
+        } while (reserves.containsKey(codiReserva));
+
         // Formateamos el codigo para que tenga 3 digitos.
         String strCodiReserva = String.format("%03d", codiReserva);
         // Imprimimos el codigo por pantalla.
         System.out.println("Codi de reserva: " + strCodiReserva);
-
+        // Devolvemos el codigo de reserva unico
         return codiReserva;
     }
 
