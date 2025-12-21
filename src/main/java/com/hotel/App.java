@@ -399,13 +399,13 @@ public class App {
         System.out.println("");
         System.out.println("Disponibilitat d'habitacions:");
         // Recorre todas las habitaciones en el mapa de capacidades iniciales
-        for (String habitacio : capacitatInicials.keySet()) {
+        for (String habitacio : capacitatInicial.keySet()) {
 
             // Obtenemos las habitaciones libres desde disponibilitatHabitacions
             int lliures = disponibilitatHabitacions.getOrDefault(habitacio, 0);
 
             // Obtener la capacidad inicial de la habitación desde capacitatsInicials
-            int total = capacitatInicials.getOrDefault(habitacio, 0); // Usamos 0 si no está en el mapa inicial
+            int total = capacitatInicial.getOrDefault(habitacio, 0); // Usamos 0 si no está en el mapa inicial
 
             // Calcular las habitaciones ocupadas
             int ocupades = total - lliures;
