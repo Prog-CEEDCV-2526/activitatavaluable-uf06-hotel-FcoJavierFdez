@@ -344,8 +344,9 @@ public class App {
      * els serveis seleccionats i l'IVA.
      */
     public static float calcularPreuTotal(String tipusHabitacio, ArrayList<String> serveisSeleccionats) {
-        // Obtenemos el precio base de la habitación.
+        // Obtenemos el precio base de la habitación según el tipo seleccionado.
         float preuBase = preusHabitacions.get(tipusHabitacio);
+        // Inicializamos el precio de los servicios a 0.
         float preuServeis = 0.0f;
 
         // Comprobamos si serveisSeleccionats no es nulo o vacío
@@ -355,11 +356,8 @@ public class App {
                 preuServeis += preusServeis.get(servei);
             }
         }
-
-        float total = preuBase + preuServeis;
-        total += total * IVA;
-
-        return total;
+        // Devuelve la suma del precio base y el precio de los servicios.
+        return preuBase + preuServeis;
     }
 
     /**
