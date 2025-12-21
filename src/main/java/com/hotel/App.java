@@ -250,7 +250,7 @@ public class App {
         System.out.println("\nTipus d'habitació disponibles:");
         System.out.println("\n1. Estàndard - " + disponibilitatHabitacions.get(TIPUS_ESTANDARD)
                 + " disponibles - " + preusHabitacions.get(TIPUS_ESTANDARD) + " euros");
-        System.out.println("2. Suite - " + disponibilitatHabitacions.get(TIPUS_SUITE) + " disponibles -"
+        System.out.println("2. Suite - " + disponibilitatHabitacions.get(TIPUS_SUITE) + " disponibles - "
                 + preusHabitacions.get(TIPUS_SUITE) + " euros");
         System.out.println("3. Deluxe - " + disponibilitatHabitacions.get(TIPUS_DELUXE) + " disponibles - "
                 + preusHabitacions.get(TIPUS_DELUXE) + " euros\n");
@@ -395,13 +395,14 @@ public class App {
      * Mostra la disponibilitat actual de les habitacions (lliures i ocupades).
      */
     public static void consultarDisponibilitat() {
+        // Linea vacia para separar la salida visualmente
         System.out.println("");
         System.out.println("Disponibilitat d'habitacions:");
-        // Recorrer el mapa que conté les capacitats inicials
+        // Recorre todas las habitaciones en el mapa de capacidades iniciales
         for (String habitacio : capacitatInicials.keySet()) {
 
-            // Obtener la disponibilidad actual de cada tipo de habitación
-            int lliures = disponibilitatHabitacions.get(habitacio);
+            // Obtenemos las habitaciones libres desde disponibilitatHabitacions
+            int lliures = disponibilitatHabitacions.getOrDefault(habitacio, 0);
 
             // Obtener la capacidad inicial de la habitación desde capacitatsInicials
             int total = capacitatInicials.getOrDefault(habitacio, 0); // Usamos 0 si no está en el mapa inicial
@@ -409,7 +410,7 @@ public class App {
             // Calcular las habitaciones ocupadas
             int ocupades = total - lliures;
 
-            // Mostrar la informació
+            // Mostrar la informació por pantalla
             System.out.println(habitacio + ": " + lliures + " lliures, " + ocupades + " ocupades.");
         }
     }
@@ -477,7 +478,7 @@ public class App {
             System.out.println("Dades de la reserva:");
             System.out.println("- " + reserva.get(0));
             System.out.println("- " + reserva.get(1));
-            System.out.println("- " + reserva.get(2) + "€");
+            System.out.println("- " + reserva.get(2) + " euros");
             System.out.println("- Serveis adicionals: ");
             // Recorre los elementos a partir del índice 3 del ArrayList, pero estos no se
             // como adicionarlos.
