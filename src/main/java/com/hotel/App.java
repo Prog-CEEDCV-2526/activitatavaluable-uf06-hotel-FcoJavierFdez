@@ -388,7 +388,31 @@ public class App {
      */
     public static void alliberarHabitacio() {
         System.out.println("\n===== ALLIBERAR HABITACIÓ =====");
-        // TODO: Demanar codi, tornar habitació i eliminar reserva
+        // Solicitamos al usuario que introduzca el codigo de reserva
+        System.out.print("Introdueix el codi de reserva: ");
+        int codiReserva = sc.nextInt();
+        sc.nextLine(); // Consumimos el salto de línea pendiente
+        // Comprobamos si existe la reserva con el codigo dado
+        if (reserves.containsKey(codiReserva)) {
+            // Obtenemos los datos de la reserva
+            ArrayList<String> reserva = reserves.get(codiReserva);
+            // Obtenemos el tipo de habitacion de la reserva
+            String tipusHabitacio = reserva.get(1); // El primer dato es el tipo de habitacion
+            // Falta comprobar la disponibilidad antes de liberar la habitacion y después.
+
+            // Actualizamos la disponibilidad de habitaciones
+            int disponibilitatActual = disponibilitatHabitacions.get(tipusHabitacio);
+            // Aumentamos en 1 la disponibilidad
+            disponibilitatHabitacions.put(tipusHabitacio, disponibilitatActual + 1);
+            // Eliminamos la reserva del HashMap
+            reserves.remove(codiReserva);
+            // Mostramos mensaje de salida en consola con exito
+            System.out.println("Habitació alliberada amb èxit.");
+            System.out.println("Disponibilitat actualitzada.");
+        } else {
+            System.out.println("El codi de reserva no existeix.");
+        }
+
     }
 
     /**
