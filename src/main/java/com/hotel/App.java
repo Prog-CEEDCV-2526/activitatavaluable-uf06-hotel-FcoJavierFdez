@@ -122,10 +122,10 @@ public class App {
                 consultarDisponibilitat();
                 break;
             case 4:
-                obtindreReserva();
+                obtindreReservaPerTipus();
                 break;
             case 5:
-                obtindreReservaPerTipus();
+                obtindreReserva();
                 break;
             case 6:
                 System.out.println("Eixint del sistema de reserves..");
@@ -197,15 +197,22 @@ public class App {
      * retorna el nom del tipus.
      */
     public static String seleccionarTipusHabitacio() {
+        // Variable que almacena el tipo de habitacion seleccionado. Empieza con null
+        // para poder usarla en el bucle while.
         String tipusHabitacio = null;
-
+        sc.nextLine(); // Consume el salto de línea pendiente
+        // Bucle que se repite hasta que se seleccione un tipo válido y haya
+        // disponibilidad.
         while (tipusHabitacio == null) {
 
             System.out.print("Seleccione tipus d'habitació: ");
-            String entrada = sc.nextLine();
-
+            // Lee la entrada del usuario como texto completo, eliminando espacios.
+            String entrada = sc.nextLine().trim();
+            // Validamos que la entrada sea 1, 2 o 3
             if (entrada.equals("1") || entrada.equals("2") || entrada.equals("3")) {
+                // Convertimos la entrada a entero
                 int opcio = Integer.parseInt(entrada);
+                // Asignamos el tipo de habitación según la opción seleccionada
                 switch (opcio) {
                     case 1:
                         tipusHabitacio = TIPUS_ESTANDARD;
@@ -220,18 +227,18 @@ public class App {
                         System.out.println("Opció no vàlida. Si us plau, seleccioneu una opció vàlida.");
                         break;
                 }
-                // Comprobar la disponibilidad
+                // Comprobamos la disponibilidad del tipo seleccionado.
                 int disponibles = disponibilitatHabitacions.getOrDefault(tipusHabitacio, 0);
                 if (disponibles <= 0) {
                     System.out.println(
                             "No hi ha habitacions disponibles per al tipus seleccionat (" + tipusHabitacio + ").");
-                    tipusHabitacio = null; // Reinicia el tipo seleccionado si no hay disponibilidad
+                    tipusHabitacio = null; // Vuelve a null y reinicia el tipo seleccionado si no hay disponibilidad
                 }
             } else {
                 System.out.println("Opció no vàlida. Si us plau, seleccione una opció vàlida.");
             }
         }
-        return tipusHabitacio;
+        return tipusHabitacio; // Devuelve el tipo de habitación seleccionado valido y disponible.
     }
 
     /**
@@ -268,10 +275,10 @@ public class App {
      * els retorna en un ArrayList de String.
      */
     public static ArrayList<String> seleccionarServeis() {
-        // Creamos una arrayList para almacenar los servicios seleccionados.
+        // ArrayList para almacenar los servicios seleccionados.
         ArrayList<String> serveisSeleccionats = new ArrayList<>();
 
-        // Definimos los servicios disponibles.
+        // Mostramos los servicios disponibles y sus precios.
         System.out.println("\nServeis addicionals (0-4):");
         System.out.println("\n0. Finalitzar.");
         System.out.println("1. Esmorzar (" + preusServeis.get(SERVEI_ESMORZAR) + " euros)");
@@ -279,20 +286,22 @@ public class App {
         System.out.println("3. Spa (" + preusServeis.get(SERVEI_SPA) + " euros)");
         System.out.println("4. Piscina (" + preusServeis.get(SERVEI_PISCINA) + " euros)\n");
 
+        // Bucle infinito para seleccionar servicios.
         while (true) {
             // Solicitamos al usuario que seleccione un servicio.
             System.out.print("Vols afegir un servei?(s/n): ");
             String resposta = sc.nextLine().trim().toLowerCase();
+            // Si la respuesta no es "s", salimos del bucle.
             if (!resposta.equals("s")) {
-                break; // Salimos del bucle si no es si
+                break;
             }
 
             System.out.print("Seleccione servei:");
             // Leemos la opcion del servicio.
             String opcio = sc.nextLine().trim();
-
+            // Variable para almacenar el servicio seleccionado.
             String servei = null;
-
+            // Asignamos el servicio según la opción seleccionada.
             switch (opcio) {
                 case "1":
                     servei = SERVEI_ESMORZAR;
@@ -307,18 +316,20 @@ public class App {
                     servei = SERVEI_PISCINA;
                     break;
                 case "0":
+                    // En este caso, finalizamos la selección de servicios.
                     System.out.println("Finalitzant selecció de serveis.");
-                    break;
+                    return serveisSeleccionats;
                 default:
                     System.out.println("Opció no vàlida. Si us plau, seleccioneu una opció vàlida.");
                     continue;
             }
+            // Si seleccionamos un servicio válido.
             if (servei != null) {
-                // Comprobar si el servicio ya ha sido seleccionado
+                // Comprobamos si el servicio ya ha sido seleccionado
                 if (serveisSeleccionats.contains(servei)) {
                     System.out.println("Ja has afegit " + servei + ". ");
                 } else {
-                    // Añadir el servicio a la lista de seleccionados
+                    // Si no, añadimos el servicio a la lista de seleccionados
                     serveisSeleccionats.add(servei);
                     System.out.println("Servei afegit:" + servei);
                 }
