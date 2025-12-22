@@ -397,9 +397,11 @@ public class App {
             // Obtenemos los datos de la reserva
             ArrayList<String> reserva = reserves.get(codiReserva);
             // Obtenemos el tipo de habitacion de la reserva
-            String tipusHabitacio = reserva.get(1); // El primer dato es el tipo de habitacion
-            // Falta comprobar la disponibilidad antes de liberar la habitacion y después.
-
+            String infoTipus = reserva.get(0); // El primer dato es el tipo de habitacion, el indice 0
+            // Definimos el tipo de habitacion extrayendolo del String
+            String[] parts = infoTipus.split(": ");
+            // Obtenemos el tipo real de habitación
+            String tipusHabitacio = parts[1];
             // Actualizamos la disponibilidad de habitaciones
             int disponibilitatActual = disponibilitatHabitacions.get(tipusHabitacio);
             // Aumentamos en 1 la disponibilidad
@@ -450,7 +452,8 @@ public class App {
         }
         // Verificamos la primera reserva (en el índice 0)
         int codiActual = codis[0];
-        ArrayList<String> reserva = mostrarDadesReserva.get(codiActual);
+        // Obtenemos la reserva asociada al código actual
+        ArrayList<String> reserva = reserves.get(codiActual);
 
         // Si el tipo de la reserva coincide con el tipo solicitado, mostramos los datos
         if (reserva.get(1).equals(tipus)) {
@@ -478,7 +481,7 @@ public class App {
             // Si existe, mostramos la reserva
             mostrarDadesReserva(codi);
         } else {
-            System.out.println("El codi de reserva no existeix.");
+            System.out.println("No s'ha trobat cap reserva amb aquest codi.");
         }
 
     }
@@ -496,21 +499,17 @@ public class App {
      * Consulta i mostra en detall la informació d'una reserva.
      */
     public static void mostrarDadesReserva(int codi) {
-        // Comprobamos la existencia de la entrada en el Hashmap con el codigo indicado.
         if (reserves.containsKey(codi)) {
             ArrayList<String> reserva = reserves.get(codi);
-            System.out.println("Dades de la reserva:");
-            System.out.println("- " + reserva.get(0));
-            System.out.println("- " + reserva.get(1));
-            System.out.println("- " + reserva.get(2) + " euros");
-            System.out.println("- Serveis adicionals: ");
-            // Recorre los elementos a partir del índice 3 del ArrayList, pero estos no se
-            // como adicionarlos.
-            for (int i = 3; i < reserva.size(); i++) {
-                System.out.println("   ->");
-            }
+            System.out.println("\n de la reserva:");
+            // Tipo de habitacion
+            System.out.println("-> " + reserva.get(0));
+            // Total
+            System.out.println("-> TOTAL: " + reserva.get(4) + " euros");
+            // Servicios seleccionados
+            System.out.println("-> " + reserva.get(1));
         } else {
-            System.out.println("No s'ha trobat cap reserva amb el codi introduït.");
+            System.out.println("No s'ha trobat cap reserva amb aquest codi.");
         }
     }
 
