@@ -131,7 +131,7 @@ public class App {
                 System.out.println("Eixint del sistema de reserves..");
                 break;
             default:
-                System.out.println("Opció no valida ");
+                System.out.println("Opció no vàlida ");
                 break;
         }
     }
@@ -418,21 +418,10 @@ public class App {
         // Linea vacia para separar la salida visualmente
         System.out.println("");
         System.out.println("Disponibilitat d'habitacions:");
-        // Recorre todas las habitaciones en el mapa de capacidades iniciales
-        for (String habitacio : capacitatInicial.keySet()) {
-
-            // Obtenemos las habitaciones libres desde disponibilitatHabitacions
-            int lliures = disponibilitatHabitacions.getOrDefault(habitacio, 0);
-
-            // Obtener la capacidad inicial de la habitación desde capacitatsInicials
-            int total = capacitatInicial.getOrDefault(habitacio, 0); // Usamos 0 si no está en el mapa inicial
-
-            // Calcular las habitaciones ocupadas
-            int ocupades = total - lliures;
-
-            // Mostrar la informació por pantalla
-            System.out.println(habitacio + ": " + lliures + " lliures, " + ocupades + " ocupades.");
-        }
+        System.out.println("Tipus\tLliures\tOcupades");
+        mostrarDisponibilitatTipus(TIPUS_ESTANDARD);
+        mostrarDisponibilitatTipus(TIPUS_SUITE);
+        mostrarDisponibilitatTipus(TIPUS_DELUXE);
     }
 
     /**
