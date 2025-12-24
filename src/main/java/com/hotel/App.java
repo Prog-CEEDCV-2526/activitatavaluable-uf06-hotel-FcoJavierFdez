@@ -200,7 +200,7 @@ public class App {
         // Variable que almacena el tipo de habitacion seleccionado. Empieza con null
         // para poder usarla en el bucle while.
         String tipusHabitacio = null;
-        // sc.nextLine(); // Consume el salto de línea pendiente
+        // sc.nextLine(); // Consume el salto de línea pendiente ERROR!!!
         // Bucle que se repite hasta que se seleccione un tipo válido y haya
         // disponibilidad.
         while (tipusHabitacio == null) {
@@ -220,7 +220,7 @@ public class App {
                     tipusHabitacio = TIPUS_DELUXE;
                     break;
                 default:
-                    System.out.println("Opció no vàlida. Si us plau, seleccioneu una opció vàlida.");
+                    System.out.println("Opció no vàlida.");
                     break;
             }
             // Comprobamos la disponibilidad del tipo seleccionado.
