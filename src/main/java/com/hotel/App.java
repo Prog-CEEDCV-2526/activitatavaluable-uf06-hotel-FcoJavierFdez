@@ -200,7 +200,7 @@ public class App {
         // Variable que almacena el tipo de habitacion seleccionado. Empieza con null
         // para poder usarla en el bucle while.
         String tipusHabitacio = null;
-        sc.nextLine(); // Consume el salto de línea pendiente
+        // sc.nextLine(); // Consume el salto de línea pendiente
         // Bucle que se repite hasta que se seleccione un tipo válido y haya
         // disponibilidad.
         while (tipusHabitacio == null) {
@@ -208,37 +208,31 @@ public class App {
             System.out.print("Seleccione tipus d'habitació: ");
             // Lee la entrada del usuario como texto completo, eliminando espacios.
             String entrada = sc.nextLine().trim();
-            // Validamos que la entrada sea 1, 2 o 3
-            if (entrada.equals("1") || entrada.equals("2") || entrada.equals("3")) {
-                // Convertimos la entrada a entero
-                int opcio = Integer.parseInt(entrada);
-                // Asignamos el tipo de habitación según la opción seleccionada
-                switch (opcio) {
-                    case 1:
-                        tipusHabitacio = TIPUS_ESTANDARD;
-                        break;
-                    case 2:
-                        tipusHabitacio = TIPUS_SUITE;
-                        break;
-                    case 3:
-                        tipusHabitacio = TIPUS_DELUXE;
-                        break;
-                    default:
-                        System.out.println("Opció no vàlida. Si us plau, seleccioneu una opció vàlida.");
-                        break;
-                }
-                // Comprobamos la disponibilidad del tipo seleccionado.
-                int disponibles = disponibilitatHabitacions.getOrDefault(tipusHabitacio, 0);
-                if (disponibles <= 0) {
-                    System.out.println(
-                            "No hi ha habitacions disponibles per al tipus seleccionat (" + tipusHabitacio + ").");
-                    tipusHabitacio = null; // Vuelve a null y reinicia el tipo seleccionado si no hay disponibilidad
-                }
-            } else {
-                System.out.println("Opció no vàlida. Si us plau, seleccione una opció vàlida.");
+            // Asignamos el tipo de habitación según la opción seleccionada
+            switch (entrada) {
+                case "1":
+                    tipusHabitacio = TIPUS_ESTANDARD;
+                    break;
+                case "2":
+                    tipusHabitacio = TIPUS_SUITE;
+                    break;
+                case "3":
+                    tipusHabitacio = TIPUS_DELUXE;
+                    break;
+                default:
+                    System.out.println("Opció no vàlida. Si us plau, seleccioneu una opció vàlida.");
+                    break;
+            }
+            // Comprobamos la disponibilidad del tipo seleccionado.
+            int disponibles = disponibilitatHabitacions.getOrDefault(tipusHabitacio, 0);
+            if (disponibles <= 0) {
+                System.out.println(
+                        "No hi ha habitacions disponibles per al tipus seleccionat (" + tipusHabitacio + ").");
+                tipusHabitacio = null; // Vuelve a null y reinicia el tipo seleccionado si no hay disponibilidad
             }
         }
         return tipusHabitacio; // Devuelve el tipo de habitación seleccionado valido y disponible.
+
     }
 
     /**
@@ -375,9 +369,9 @@ public class App {
         } while (reserves.containsKey(codiReserva));
 
         // Formateamos el codigo para que tenga 3 digitos.
-        String strCodiReserva = String.format("%03d", codiReserva);
+        // String strCodiReserva = String.format("%03d", codiReserva);
         // Imprimimos el codigo por pantalla.
-        System.out.println("Codi de reserva: " + strCodiReserva);
+        // System.out.println("Codi de reserva: " + strCodiReserva);
         // Devolvemos el codigo de reserva unico
         return codiReserva;
     }
