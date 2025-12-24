@@ -350,8 +350,10 @@ public class App {
                 preuServeis += preusServeis.get(servei);
             }
         }
-        // Devuelve la suma del precio base y el precio de los servicios.
-        return preuBase + preuServeis;
+        // Devuelve la suma del precio base y el precio de los servicios con IVA
+        // incluido
+        float subtotal = preuBase + preuServeis;
+        return subtotal + (subtotal * IVA);
     }
 
     /**
