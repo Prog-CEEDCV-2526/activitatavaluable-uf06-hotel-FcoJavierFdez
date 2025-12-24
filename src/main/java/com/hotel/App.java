@@ -131,7 +131,7 @@ public class App {
                 System.out.println("Eixint del sistema de reserves..");
                 break;
             default:
-                System.out.println("Opció no valida. Introdueix una opció valida ");
+                System.out.println("Opció no valida ");
                 break;
         }
     }
@@ -220,7 +220,7 @@ public class App {
                     tipusHabitacio = TIPUS_DELUXE;
                     break;
                 default:
-                    System.out.println("Opció no vàlida.");
+                    System.out.println("Opció no vàlida");
                     break;
             }
             // Comprobamos la disponibilidad del tipo seleccionado.
@@ -395,9 +395,7 @@ public class App {
             // Obtenemos el tipo de habitacion de la reserva
             String infoTipus = reserva.get(0); // El primer dato es el tipo de habitacion, el indice 0
             // Definimos el tipo de habitacion extrayendolo del String
-            String[] parts = infoTipus.split(": ");
-            // Obtenemos el tipo real de habitación
-            String tipusHabitacio = parts[1];
+            String tipusHabitacio = infoTipus.replace("Tipus habitació: ", "");
             // Actualizamos la disponibilidad de habitaciones
             int disponibilitatActual = disponibilitatHabitacions.get(tipusHabitacio);
             // Aumentamos en 1 la disponibilidad
@@ -452,8 +450,8 @@ public class App {
         ArrayList<String> reserva = reserves.get(codiActual);
 
         // Si el tipo de la reserva coincide con el tipo solicitado, mostramos los datos
-        if (reserva.get(1).equals(tipus)) {
-            mostrarDadesReserva(codiActual); // Llamamos al método para mostrar los detalles
+        if (reserva != null && reserva.get(0).contains(tipus)) {
+            mostrarDadesReserva(codiActual);
         }
         // Creamos un nuevo array excluyendo el primer elemento
         int[] nuevosCodis = new int[codis.length - 1];
@@ -488,7 +486,14 @@ public class App {
      */
     public static void obtindreReservaPerTipus() {
         System.out.println("\n===== CONSULTAR RESERVES PER TIPUS =====");
-        // TODO: Llistar reserves per tipus
+
+        // Solicitamos al usuario que introduzca el tipo de habitacion
+        System.out.print("Introdueix el tipus d'habitació (Estàndard/Suite/Deluxe): ");
+        String tipus = sc.nextLine().trim();
+        // Obtenemos todos los códigos de reserva en un array
+        for (int codi : reserves.keySet()) {
+            mostrarDadesReserva(codi);
+        }
     }
 
     /**
@@ -505,7 +510,7 @@ public class App {
             // Servicios seleccionados
             System.out.println("-> " + reserva.get(1));
         } else {
-            System.out.println("No s'ha trobat cap reserva amb aquest codi.");
+            System.out.println("Codi no trobat");
         }
     }
 
