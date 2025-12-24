@@ -406,7 +406,7 @@ public class App {
             System.out.println("Habitació alliberada amb èxit.");
             System.out.println("Disponibilitat actualitzada.");
         } else {
-            System.out.println("El codi de reserva no existeix.");
+            System.out.println("Codi no trobat");
         }
 
     }
