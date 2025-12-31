@@ -171,12 +171,11 @@ public class App {
         // Guarda la reserva en el HashMap
         ArrayList<String> reserva = new ArrayList<>();
 
-        reserva.add("Tipus habitació: " + tipusHabitacio);
-        reserva.add("Serveis: " + serveisFormatejats);
-        reserva.add("Subtotal: " + subtotal);
-        reserva.add("IVA: " + iva);
-        reserva.add("TOTAL: " + total);
-        reserva.add("Codi de reserva: " + codiReserva);
+        reserva.add(tipusHabitacio); // posición 0 = tipus
+        reserva.add(serveisFormatejats); // posición 1 = serveis
+        reserva.add(String.valueOf(subtotal)); // posición 2 = subtotal
+        reserva.add(String.valueOf(iva)); // posición 3 = IVA
+        reserva.add(String.valueOf(total)); // posición 4 = TOTAL
 
         reserves.put(codiReserva, reserva);
 
@@ -206,6 +205,8 @@ public class App {
         while (tipusHabitacio == null) {
 
             System.out.print("Seleccione tipus d'habitació: ");
+            if (!sc.hasNextLine())
+                break;
             // Lee la entrada del usuario como texto completo, eliminando espacios.
             String entrada = sc.nextLine().trim();
             // Asignamos el tipo de habitación según la opción seleccionada
@@ -224,14 +225,14 @@ public class App {
                     continue; // Reinicia el bucle si la opción no es válida
             }
             // Comprobamos la disponibilidad del tipo seleccionado.
-            if (tipusHabitacio != null) {
-                int disponibles = disponibilitatHabitacions.getOrDefault(tipusHabitacio, 0);
-                if (disponibles <= 0) {
-                    System.out.println(
-                            "No hi ha habitacions disponibles per al tipus seleccionat (" + tipusHabitacio + ").");
-                    tipusHabitacio = null; // Vuelve a null y reinicia el tipo seleccionado si no hay disponibilidad
-                }
+
+            int disponibles = disponibilitatHabitacions.getOrDefault(tipusHabitacio, 0);
+            if (disponibles <= 0) {
+                System.out.println(
+                        "No hi ha habitacions disponibles per al tipus seleccionat (" + tipusHabitacio + ").");
+                tipusHabitacio = null; // Vuelve a null y reinicia el tipo seleccionado si no hay disponibilidad
             }
+
         }
         return tipusHabitacio; // Devuelve el tipo de habitación seleccionado valido y disponible.
 
@@ -509,25 +510,13 @@ public class App {
         for (int codi : reserves.keySet()) {
 
             ArrayList<String> reserva = reserves.get(codi);
-
-            String tipusReserva = reserva.get(0).split(": ")[1];
-
+            String tipusReserva = reserva.get(0);
             if (tipusReserva.equals(tipus)) {
+                System.out.println("Codi: " + codi);
+                System.out.println("    Tipus d'habitació: " + reserva.get(0));
+                System.out.println("    Cost total: " + reserva.get(4) + "€");
+                System.out.println("    Serveis: " + reserva.get(1));
 
-                System.out.println("Codi: " + codi + "\n");
-
-                System.out.println("    " + reserva.get(0));
-                System.out.println("    Cost total: " + reserva.get(4).replace("TOTAL: ", "") + "€");
-
-                System.out.println("    Serveis:");
-                String serveis = reserva.get(1).replace("Serveis: ", "");
-                String[] llistaServeis = serveis.split(",");
-
-                for (String servei : llistaServeis) {
-                    System.out.println("        " + servei.trim());
-                }
-
-                System.out.println();
                 hiHaReserves = true;
             }
         }
@@ -548,10 +537,10 @@ public class App {
 
             if (reserva.size() > 0)
                 System.out.println("-> " + reserva.get(0));
-            if (reserva.size() > 4)
-                System.out.println("-> TOTAL: " + reserva.get(4) + " euros");
             if (reserva.size() > 1)
                 System.out.println("-> " + reserva.get(1));
+            if (reserva.size() > 4)
+                System.out.println("-> TOTAL: " + reserva.get(4) + " euros");
 
         } else {
             System.out.println("Codi no trobat");
