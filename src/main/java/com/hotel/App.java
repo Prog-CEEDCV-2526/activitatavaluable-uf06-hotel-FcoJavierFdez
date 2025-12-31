@@ -221,14 +221,16 @@ public class App {
                     break;
                 default:
                     System.out.println("Opció no vàlida");
-                    break;
+                    continue; // Reinicia el bucle si la opción no es válida
             }
             // Comprobamos la disponibilidad del tipo seleccionado.
-            int disponibles = disponibilitatHabitacions.getOrDefault(tipusHabitacio, 0);
-            if (disponibles <= 0) {
-                System.out.println(
-                        "No hi ha habitacions disponibles per al tipus seleccionat (" + tipusHabitacio + ").");
-                tipusHabitacio = null; // Vuelve a null y reinicia el tipo seleccionado si no hay disponibilidad
+            if (tipusHabitacio != null) {
+                int disponibles = disponibilitatHabitacions.getOrDefault(tipusHabitacio, 0);
+                if (disponibles <= 0) {
+                    System.out.println(
+                            "No hi ha habitacions disponibles per al tipus seleccionat (" + tipusHabitacio + ").");
+                    tipusHabitacio = null; // Vuelve a null y reinicia el tipo seleccionado si no hay disponibilidad
+                }
             }
         }
         return tipusHabitacio; // Devuelve el tipo de habitación seleccionado valido y disponible.
@@ -477,12 +479,63 @@ public class App {
         System.out.println("\n===== CONSULTAR RESERVES PER TIPUS =====");
 
         // Solicitamos al usuario que introduzca el tipo de habitacion
-        System.out.print("Introdueix el tipus d'habitació (Estàndard/Suite/Deluxe): ");
-        String tipus = sc.nextLine().trim();
-        // Obtenemos todos los códigos de reserva en un array
-        for (int codi : reserves.keySet()) {
-            mostrarDadesReserva(codi);
+        System.out.print("Seleccione tipus:");
+        System.out.println("    Estàndard");
+        System.out.println("    Suite");
+        System.out.println("    Deluxe\n");
+
+        System.out.print("Opció: ");
+        String opcio = sc.nextLine();
+
+        String tipus = null;
+        switch (opcio) {
+            case "1":
+                tipus = TIPUS_ESTANDARD;
+                break;
+            case "2":
+                tipus = TIPUS_SUITE;
+                break;
+            case "3":
+                tipus = TIPUS_DELUXE;
+                break;
+            default:
+                System.out.println("Opció no vàlida");
+                return;
         }
+        System.out.println("\nReserves del tipus \"" + tipus + "\":\n");
+
+        boolean hiHaReserves = false;
+
+        for (int codi : reserves.keySet()) {
+
+            ArrayList<String> reserva = reserves.get(codi);
+
+            String tipusReserva = reserva.get(0).split(": ")[1];
+
+            if (tipusReserva.equals(tipus)) {
+
+                System.out.println("Codi: " + codi + "\n");
+
+                System.out.println("    " + reserva.get(0));
+                System.out.println("    Cost total: " + reserva.get(4).replace("TOTAL: ", "") + "€");
+
+                System.out.println("    Serveis:");
+                String serveis = reserva.get(1).replace("Serveis: ", "");
+                String[] llistaServeis = serveis.split(",");
+
+                for (String servei : llistaServeis) {
+                    System.out.println("        " + servei.trim());
+                }
+
+                System.out.println();
+                hiHaReserves = true;
+            }
+        }
+
+        if (!hiHaReserves) {
+            System.out.println("(No hi ha més reserves d’aquest tipus.)");
+        }
+
     }
 
     /**
@@ -492,12 +545,14 @@ public class App {
         if (reserves.containsKey(codi)) {
             ArrayList<String> reserva = reserves.get(codi);
             System.out.println("\n de la reserva:");
-            // Tipo de habitacion
-            System.out.println("-> " + reserva.get(0));
-            // Total
-            System.out.println("-> TOTAL: " + reserva.get(4) + " euros");
-            // Servicios seleccionados
-            System.out.println("-> " + reserva.get(1));
+
+            if (reserva.size() > 0)
+                System.out.println("-> " + reserva.get(0));
+            if (reserva.size() > 4)
+                System.out.println("-> TOTAL: " + reserva.get(4) + " euros");
+            if (reserva.size() > 1)
+                System.out.println("-> " + reserva.get(1));
+
         } else {
             System.out.println("Codi no trobat");
         }
